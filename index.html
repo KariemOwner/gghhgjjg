@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniCalc Pro - Kalkulator Mahakarya All-in-One</title>
+  <meta name="description" content="Kalkulator terlengkap di dunia: Standar, Ilmiah, Grafik 2D, Programmer Bitwise 64-bit, Finansial, Matriks, Statistik, Solver Persamaan, dan Konverter Satuan.">
+  
+  <!-- FontAwesome Icons for sleek UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Core & Theme Styles -->
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="brand-icon">
+        <i class="fa-solid fa-infinity"></i>
+      </div>
+      <div>
+        <span class="brand-title">OmniCalc</span>
+        <span class="brand-badge">PRO v2.0</span>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Sound FX Selector -->
+      <select id="soundSelect" class="styled-input" style="padding: 0.35rem 0.6rem; font-size: 0.8rem; width: 120px;" title="Efek Suara Klik">
+        <option value="laser">🔊 Laser FX</option>
+        <option value="mech">⌨️ Mekanik</option>
+        <option value="beep">🔉 Beep</option>
+        <option value="off">🔇 Hening</option>
+      </select>
+
+      <!-- Theme Selector -->
+      <select id="themeSelect" class="styled-input" style="padding: 0.35rem 0.6rem; font-size: 0.8rem; width: 130px;" title="Pilihan Tema Tampilan">
+        <option value="dark">🌌 Cyber Dark</option>
+        <option value="oled">🖤 OLED Pitch</option>
+        <option value="light">☀️ Studio Light</option>
+        <option value="retro">📟 Retro Casio</option>
+      </select>
+
+      <!-- Constants Modal Trigger -->
+      <button id="openConstantsBtn" class="icon-btn" title="Daftar Konstanta Fisika & Matematika">
+        <i class="fa-solid fa-atom"></i>
+      </button>
+
+      <!-- Keyboard Shortcuts Trigger -->
+      <button id="openHelpBtn" class="icon-btn" title="Pintasan Keyboard (F1 / ?)">
+        <i class="fa-solid fa-keyboard"></i>
+      </button>
+
+      <!-- History Drawer Trigger -->
+      <button id="historyToggleBtn" class="icon-btn" title="Riwayat Perhitungan">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- App Main Layout -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="nav-category">Kalkulator Inti</div>
+      <button class="nav-tab-btn active" data-tab="standard">
+        <i class="fa-solid fa-calculator"></i> Standar
+      </button>
+      <button class="nav-tab-btn" data-tab="scientific">
+        <i class="fa-solid fa-flask"></i> Ilmiah (Scientific)
+      </button>
+      <button class="nav-tab-btn" data-tab="graphing">
+        <i class="fa-solid fa-chart-line"></i> Grafik 2D Plotter
+      </button>
+      <button class="nav-tab-btn" data-tab="programmer">
+        <i class="fa-solid fa-microchip"></i> Programmer Base-N
+      </button>
+
+      <div class="nav-category" style="margin-top: 0.5rem;">Aljabar & Sains</div>
+      <button class="nav-tab-btn" data-tab="matrix">
+        <i class="fa-solid fa-table-cells"></i> Matriks & Vektor
+      </button>
+      <button class="nav-tab-btn" data-tab="solver">
+        <i class="fa-solid fa-square-root-variable"></i> Solver Persamaan
+      </button>
+      <button class="nav-tab-btn" data-tab="statistics">
+        <i class="fa-solid fa-chart-pie"></i> Statistik & Regresi
+      </button>
+
+      <div class="nav-category" style="margin-top: 0.5rem;">Finansial & Utilitas</div>
+      <button class="nav-tab-btn" data-tab="financial">
+        <i class="fa-solid fa-coins"></i> Finansial & Cicilan
+      </button>
+      <button class="nav-tab-btn" data-tab="converter">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i> Konverter Satuan
+      </button>
+      <button class="nav-tab-btn" data-tab="datetime">
+        <i class="fa-solid fa-stopwatch"></i> Waktu & Stopwatch
+      </button>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="app-workspace">
+
+      <!-- ================= 1. STANDARD & SCIENTIFIC VIEW ================= -->
+      <div id="panel-standard" class="view-panel active">
+        <div class="calc-card">
+          <!-- Top Display Info -->
+          <div class="mode-bar">
+            <div class="mode-pills">
+              <span class="pill angle-pill active" data-mode="DEG" onclick="window.OmniApp.setAngleMode('DEG')">DEG</span>
+              <span class="pill angle-pill" data-mode="RAD" onclick="window.OmniApp.setAngleMode('RAD')">RAD</span>
+              <span class="pill angle-pill" data-mode="GRAD" onclick="window.OmniApp.setAngleMode('GRAD')">GRAD</span>
+            </div>
+            <div class="memory-indicators">
+              <span id="memIndicator">M</span>
+            </div>
+          </div>
+
+          <!-- Screen Display -->
+          <div class="calc-display">
+            <div id="displayHistoryLine" class="display-history-line"></div>
+            <input type="text" id="displayActiveLine" class="display-active-line" value="0" readonly>
+            <div id="displaySubPreview" class="display-sub-preview"></div>
+          </div>
+
+          <!-- Memory Bar -->
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="calc-btn btn-fn" style="flex: 1; height: 38px;" onclick="window.OmniApp.memoryClear()">MC</button>
+            <button class="calc-btn btn-fn" style="flex: 1; height: 38px;" onclick="window.OmniApp.memoryRecall()">MR</button>
+            <button class="calc-btn btn-fn" style="flex: 1; height: 38px;" onclick="window.OmniApp.memoryAdd()">M+</button>
+            <button class="calc-btn btn-fn" style="flex: 1; height: 38px;" onclick="window.OmniApp.memorySubtract()">M-</button>
+            <button class="calc-btn btn-fn" style="flex: 1; height: 38px;" onclick="window.OmniApp.memoryStore()">MS</button>
+          </div>
+
+          <!-- Standard Keypad Grid -->
+          <div class="keypad-grid">
+            <button class="calc-btn btn-danger" onclick="window.OmniApp.clearAll()">AC</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.backspace()"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('%')">%</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('/')">÷</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('7')">7</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('8')">8</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('9')">9</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('*')">×</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('4')">4</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('5')">5</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('6')">6</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('-')">−</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('1')">1</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('2')">2</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('3')">3</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('+')">+</button>
+
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.toggleSign()">±</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('0')">0</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('.')">.</button>
+            <button class="calc-btn btn-action" onclick="window.OmniApp.calculate()">=</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 2. SCIENTIFIC VIEW ================= -->
+      <div id="panel-scientific" class="view-panel">
+        <div class="calc-card">
+          <!-- Top Display Info -->
+          <div class="mode-bar">
+            <div class="mode-pills">
+              <span class="pill angle-pill active" data-mode="DEG" onclick="window.OmniApp.setAngleMode('DEG')">DEG</span>
+              <span class="pill angle-pill" data-mode="RAD" onclick="window.OmniApp.setAngleMode('RAD')">RAD</span>
+              <span class="pill angle-pill" data-mode="GRAD" onclick="window.OmniApp.setAngleMode('GRAD')">GRAD</span>
+            </div>
+            <div class="memory-indicators">
+              <span id="memIndicatorSci">M</span>
+            </div>
+          </div>
+
+          <!-- Screen Display (reuses display state) -->
+          <div class="calc-display">
+            <div class="display-history-line"></div>
+            <input type="text" class="display-active-line" value="0" readonly>
+            <div class="display-sub-preview"></div>
+          </div>
+
+          <!-- Scientific Keypad Grid (6 Columns) -->
+          <div class="keypad-grid scientific-grid">
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('sin')">sin</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('cos')">cos</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('tan')">tan</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('asin')">sin⁻¹</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('acos')">cos⁻¹</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('atan')">tan⁻¹</button>
+
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('sinh')">sinh</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('cosh')">cosh</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('tanh')">tanh</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('ln')">ln</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('log')">log₁₀</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('log2')">log₂</button>
+
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('^2')">x²</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('^3')">x³</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('^')">xʸ</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('sqrt')">√x</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('cbrt')">∛x</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('fact')">n!</button>
+
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputConstant('pi')">π</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputConstant('e')">e</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputConstant('phi')">ϕ</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('(')">(</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator(')')">)</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('abs')">|x|</button>
+
+            <button class="calc-btn btn-danger" onclick="window.OmniApp.clearAll()">AC</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.backspace()"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('nCr')">nCr</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('nPr')">nPr</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputOperator('%')">%</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('/')">÷</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('7')">7</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('8')">8</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('9')">9</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('*')">×</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('rand')">rand</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.inputFunction('exp')">eˣ</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('4')">4</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('5')">5</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('6')">6</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('-')">−</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('1')">1</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('2')">2</button>
+
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('3')">3</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.inputOperator('+')">+</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.toggleSign()">±</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('0')">0</button>
+            <button class="calc-btn btn-num" onclick="window.OmniApp.inputDigit('.')">.</button>
+            <button class="calc-btn btn-action" onclick="window.OmniApp.calculate()">=</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. GRAPHING 2D VIEW ================= -->
+      <div id="panel-graphing" class="view-panel">
+        <div class="calc-card">
+          <div class="graph-container">
+            <!-- Graph Function Inputs -->
+            <div class="graph-controls-bar">
+              <div class="func-input-group">
+                <span class="func-badge" style="color: var(--accent-cyan);">f(x) =</span>
+                <input type="text" id="graphF1Input" class="styled-input" value="sin(x)" placeholder="e.g. sin(x), x^2 - 4">
+              </div>
+
+              <div class="func-input-group">
+                <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                  <input type="checkbox" id="graphF2Toggle">
+                  <span class="func-badge" style="color: var(--accent-pink);">g(x) =</span>
+                </label>
+                <input type="text" id="graphF2Input" class="styled-input" value="cos(x)" placeholder="e.g. cos(x)">
+              </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="graph-canvas-wrapper">
+              <canvas id="graphCanvas"></canvas>
+              <div id="graphCoords" class="graph-coords-tooltip">X: 0.00 | Y: 0.00</div>
+              
+              <!-- Zoom & Pan Quick Tools -->
+              <div class="graph-overlay-tools">
+                <button class="icon-btn" onclick="window.Grapher.zoomIn()" title="Perbesar (Zoom In)"><i class="fa-solid fa-plus"></i></button>
+                <button class="icon-btn" onclick="window.Grapher.zoomOut()" title="Perkecil (Zoom Out)"><i class="fa-solid fa-minus"></i></button>
+                <button class="icon-btn" onclick="window.Grapher.resetView()" title="Reset Tampilan (Default Range)"><i class="fa-solid fa-arrows-rotate"></i></button>
+              </div>
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-dim); display: flex; justify-content: space-between;">
+              <span>💡 Geser (Drag) untuk memindahkan grafik, Gunakan scroll mouse untuk Zoom.</span>
+              <span style="color: var(--accent-pink);">Garis merah muda: Garis singgung (turunan f'(x))</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4. PROGRAMMER BASE-N VIEW ================= -->
+      <div id="panel-programmer" class="view-panel">
+        <div class="calc-card">
+          <!-- Word Size Selector -->
+          <div class="mode-bar">
+            <div class="mode-pills">
+              <span class="pill word-pill active" data-bits="64">QWORD (64-bit)</span>
+              <span class="pill word-pill" data-bits="32">DWORD (32-bit)</span>
+              <span class="pill word-pill" data-bits="16">WORD (16-bit)</span>
+              <span class="pill word-pill" data-bits="8">BYTE (8-bit)</span>
+            </div>
+          </div>
+
+          <!-- Base-N Realtime Displays -->
+          <div class="programmer-base-list">
+            <div class="base-row" data-base="HEX">
+              <span class="base-label">HEX</span>
+              <span id="progValHex" class="base-val">0000 0000 0000 0000</span>
+            </div>
+            <div class="base-row active" data-base="DEC">
+              <span class="base-label">DEC</span>
+              <span id="progValDec" class="base-val">0</span>
+            </div>
+            <div class="base-row" data-base="OCT">
+              <span class="base-label">OCT</span>
+              <span id="progValOct" class="base-val">0</span>
+            </div>
+            <div class="base-row" data-base="BIN">
+              <span class="base-label">BIN</span>
+              <span id="progValBin" class="base-val">0000 0000 0000 0000</span>
+            </div>
+          </div>
+
+          <!-- 64-Bit Interactive Bitboard -->
+          <div class="bitboard-container">
+            <div class="bitboard-header">
+              <span>Bit 63</span>
+              <span>Bit 32</span>
+              <span>Bit 31</span>
+              <span>Bit 0</span>
+            </div>
+            <div id="bitboardGrid" class="bitboard-grid"></div>
+          </div>
+
+          <!-- Programmer Keypad Grid -->
+          <div class="keypad-grid programmer-grid">
+            <button class="calc-btn btn-fn prog-key" data-val="A" onclick="window.OmniApp.inputProgChar('A')">A</button>
+            <button class="calc-btn btn-fn prog-key" data-val="B" onclick="window.OmniApp.inputProgChar('B')">B</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('LSH')">LSH &lt;&lt;</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('RSH')">RSH &gt;&gt;</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('NOT')">NOT ~</button>
+            <button class="calc-btn btn-danger" onclick="window.OmniApp.progClear()">AC</button>
+
+            <button class="calc-btn btn-fn prog-key" data-val="C" onclick="window.OmniApp.inputProgChar('C')">C</button>
+            <button class="calc-btn btn-fn prog-key" data-val="D" onclick="window.OmniApp.inputProgChar('D')">D</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('RoL')">RoL ↺</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('RoR')">RoR ↻</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBitwise('SWAP')">Swap B</button>
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.progBackspace()"><i class="fa-solid fa-delete-left"></i></button>
+
+            <button class="calc-btn btn-fn prog-key" data-val="E" onclick="window.OmniApp.inputProgChar('E')">E</button>
+            <button class="calc-btn btn-fn prog-key" data-val="F" onclick="window.OmniApp.inputProgChar('F')">F</button>
+            <button class="calc-btn btn-num prog-key" data-val="7" onclick="window.OmniApp.inputProgChar('7')">7</button>
+            <button class="calc-btn btn-num prog-key" data-val="8" onclick="window.OmniApp.inputProgChar('8')">8</button>
+            <button class="calc-btn btn-num prog-key" data-val="9" onclick="window.OmniApp.inputProgChar('9')">9</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.progBitwise('AND')">AND</button>
+
+            <button class="calc-btn btn-fn" onclick="window.OmniApp.programmer.isSigned = !window.OmniApp.programmer.isSigned; window.OmniApp.updateProgrammerDisplay();">2's Comp</button>
+            <button class="calc-btn btn-num prog-key" data-val="4" onclick="window.OmniApp.inputProgChar('4')">4</button>
+            <button class="calc-btn btn-num prog-key" data-val="5" onclick="window.OmniApp.inputProgChar('5')">5</button>
+            <button class="calc-btn btn-num prog-key" data-val="6" onclick="window.OmniApp.inputProgChar('6')">6</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.progBitwise('OR')">OR</button>
+            <button class="calc-btn btn-op" onclick="window.OmniApp.progBitwise('XOR')">XOR</button>
+
+            <button class="calc-btn btn-num prog-key" data-val="1" onclick="window.OmniApp.inputProgChar('1')">1</button>
+            <button class="calc-btn btn-num prog-key" data-val="2" onclick="window.OmniApp.inputProgChar('2')">2</button>
+            <button class="calc-btn btn-num prog-key" data-val="3" onclick="window.OmniApp.inputProgChar('3')">3</button>
+            <button class="calc-btn btn-num prog-key span-2" data-val="0" onclick="window.OmniApp.inputProgChar('0')">0</button>
+            <button class="calc-btn btn-action" onclick="window.OmniApp.updateProgrammerDisplay()">DONE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 5. FINANCIAL & LOAN VIEW ================= -->
+      <div id="panel-financial" class="view-panel">
+        <div class="matrix-builder">
+          <!-- Loan Amortization Card -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-cyan); font-size: 1.05rem;"><i class="fa-solid fa-house"></i> Kalkulator Cicilan & KPR</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Jumlah Pinjaman (Rp):</label>
+              <input type="number" id="loanAmount" class="styled-input" value="100000000" placeholder="100000000">
+              
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Suku Bunga Tahunan (%):</label>
+              <input type="number" id="loanRate" class="styled-input" value="8.5" step="0.1" placeholder="8.5">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Jangka Waktu (Tahun):</label>
+              <input type="number" id="loanYears" class="styled-input" value="5" placeholder="5">
+
+              <button id="calcLoanBtn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 42px; font-size: 0.95rem;">Hitung Cicilan</button>
+            </div>
+
+            <div style="background: var(--display-bg); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Cicilan Bulanan:</span>
+                <b id="loanMonthlyPay" style="color: var(--accent-cyan); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total Pembayaran:</span>
+                <b id="loanTotalPay" style="color: var(--text-main); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total Bunga:</span>
+                <b id="loanTotalInterest" style="color: var(--accent-rose); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compound Interest Card -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-purple); font-size: 1.05rem;"><i class="fa-solid fa-chart-line"></i> Bunga Majemuk (Investasi)</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Modal Awal (Rp):</label>
+              <input type="number" id="compoundInitial" class="styled-input" value="10000000">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Setoran Rutin Bulanan (Rp):</label>
+              <input type="number" id="compoundMonthly" class="styled-input" value="1000000">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Estimasi Return Tahunan (%):</label>
+              <input type="number" id="compoundRate" class="styled-input" value="12" step="0.1">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Durasi Investasi (Tahun):</label>
+              <input type="number" id="compoundYears" class="styled-input" value="10">
+
+              <button id="calcCompoundBtn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 42px; font-size: 0.95rem;">Hitung Investasi</button>
+            </div>
+
+            <div style="background: var(--display-bg); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Nilai Akhir Portofolio:</span>
+                <b id="compoundTotalBalance" style="color: var(--accent-emerald); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total Modal Disetor:</span>
+                <b id="compoundTotalPrincipal" style="color: var(--text-main); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Keuntungan Bersih:</span>
+                <b id="compoundTotalInterest" style="color: var(--accent-cyan); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tip & Tax Splitter -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-amber); font-size: 1.05rem;"><i class="fa-solid fa-receipt"></i> Tip & Split Bill Restoran</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Total Tagihan (Rp):</label>
+              <input type="number" id="tipBill" class="styled-input" value="350000">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Persentase Tip (%):</label>
+              <input type="number" id="tipPercent" class="styled-input" value="10">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Jumlah Orang:</label>
+              <input type="number" id="tipPeople" class="styled-input" value="4">
+
+              <button id="calcTipBtn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 42px; font-size: 0.95rem;">Bagi Tagihan</button>
+            </div>
+
+            <div style="background: var(--display-bg); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Total Tagihan + Tip:</span>
+                <b id="tipTotalBill" style="color: var(--text-main); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Bayar Per Orang:</span>
+                <b id="tipPerPerson" style="color: var(--accent-amber); font-family: 'Fira Code', monospace;">Rp 0</b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule Preview Table -->
+        <div class="calc-card" style="margin-top: 1rem;">
+          <h4 style="font-size: 0.95rem; color: var(--text-muted);">Jadwal Amortisasi Pinjaman (24 Bulan Pertama)</h4>
+          <div style="overflow-x: auto; max-height: 250px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Periode</th>
+                  <th>Pokok (Rp)</th>
+                  <th>Bunga (Rp)</th>
+                  <th>Sisa Saldo (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="amortizationTableBody">
+                <tr><td colspan="4" style="text-align: center; color: var(--text-dim);">Jadwal amortisasi akan muncul setelah menghitung cicilan.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 6. MATRIX & VECTOR VIEW ================= -->
+      <div id="panel-matrix" class="view-panel">
+        <div class="calc-card">
+          <div class="matrix-builder">
+            <!-- Matrix A -->
+            <div class="matrix-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="color: var(--accent-cyan);"><i class="fa-solid fa-table-cells"></i> Matriks A</h4>
+                <select id="matrixDimA" class="styled-input" style="width: 90px; padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+                  <option value="2x2" selected>2 × 2</option>
+                  <option value="3x3">3 × 3</option>
+                  <option value="4x4">4 × 4</option>
+                  <option value="5x5">5 × 5</option>
+                </select>
+              </div>
+              <div id="matrixGridA" class="matrix-grid-input"></div>
+              
+              <!-- Matrix A Operations -->
+              <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                <button class="calc-btn btn-fn" style="flex: 1; height: 36px; font-size: 0.8rem;" onclick="window.OmniApp.calcMatrix('detA')">det(A)</button>
+                <button class="calc-btn btn-fn" style="flex: 1; height: 36px; font-size: 0.8rem;" onclick="window.OmniApp.calcMatrix('invA')">A⁻¹ (Invers)</button>
+                <button class="calc-btn btn-fn" style="flex: 1; height: 36px; font-size: 0.8rem;" onclick="window.OmniApp.calcMatrix('transA')">Aᵀ</button>
+                <button class="calc-btn btn-fn" style="flex: 1; height: 36px; font-size: 0.8rem;" onclick="window.OmniApp.calcMatrix('rankA')">Rank(A)</button>
+              </div>
+            </div>
+
+            <!-- Matrix B -->
+            <div class="matrix-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="color: var(--accent-pink);"><i class="fa-solid fa-table-cells"></i> Matriks B</h4>
+                <select id="matrixDimB" class="styled-input" style="width: 90px; padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+                  <option value="2x2" selected>2 × 2</option>
+                  <option value="3x3">3 × 3</option>
+                  <option value="4x4">4 × 4</option>
+                  <option value="5x5">5 × 5</option>
+                </select>
+              </div>
+              <div id="matrixGridB" class="matrix-grid-input"></div>
+              
+              <!-- Binary Matrix Operations -->
+              <div style="display: flex; gap: 0.35rem;">
+                <button class="calc-btn btn-op" style="flex: 1; height: 36px; font-size: 0.85rem;" onclick="window.OmniApp.calcMatrix('add')">A + B</button>
+                <button class="calc-btn btn-op" style="flex: 1; height: 36px; font-size: 0.85rem;" onclick="window.OmniApp.calcMatrix('sub')">A − B</button>
+                <button class="calc-btn btn-action" style="flex: 1; height: 36px; font-size: 0.85rem;" onclick="window.OmniApp.calcMatrix('mult')">A × B</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Matrix Results -->
+          <div style="margin-top: 1rem;">
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">Hasil Operasi Aljabar Linear:</h4>
+            <div id="matrixResultBox" class="result-box">
+              <span style="color: var(--text-dim);">Pilih salah satu operasi matriks di atas untuk melihat kalkulasi detail.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 7. STATISTICS VIEW ================= -->
+      <div id="panel-statistics" class="view-panel">
+        <div class="calc-card">
+          <h3 style="color: var(--accent-blue); font-size: 1.05rem;"><i class="fa-solid fa-chart-simple"></i> Analisis Statistik Deskriptif & Distribusi</h3>
+          
+          <div>
+            <label style="font-size: 0.85rem; color: var(--text-muted);">Masukkan Data Sampel (Pisahkan dengan koma, spasi, atau baris baru):</label>
+            <textarea id="statDataInput" class="styled-input" style="width: 100%; height: 90px; margin-top: 0.4rem; resize: vertical;" placeholder="Contoh: 12, 15, 23, 19, 34, 18, 25, 29, 31, 22, 18">12, 15, 23, 19, 34, 18, 25, 29, 31, 22, 18</textarea>
+            <button id="statAnalyzeBtn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 42px; font-size: 0.95rem; width: 100%;">Analisis Dataset Lengkap</button>
+          </div>
+
+          <!-- Statistical Results Grid -->
+          <div id="statResultsGrid" class="matrix-builder" style="margin-top: 0.5rem;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 8. EQUATION SOLVER VIEW ================= -->
+      <div id="panel-solver" class="view-panel">
+        <div class="matrix-builder">
+          <!-- Quadratic Solver -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-cyan); font-size: 1.05rem;"><i class="fa-solid fa-square-root-variable"></i> Solver Persamaan Kuadrat</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Format: ax² + bx + c = 0 (Termasuk akar imajiner/kompleks)</p>
+            
+            <div class="eq-inputs-row" style="margin-top: 0.5rem;">
+              <div class="eq-input-item">
+                <label for="quadA">Koefisien a</label>
+                <input type="number" id="quadA" class="styled-input" value="1" placeholder="a">
+              </div>
+              <div class="eq-input-item">
+                <label for="quadB">Koefisien b</label>
+                <input type="number" id="quadB" class="styled-input" value="-5" placeholder="b">
+              </div>
+              <div class="eq-input-item">
+                <label for="quadC">Konstanta c</label>
+                <input type="number" id="quadC" class="styled-input" value="6" placeholder="c">
+              </div>
+            </div>
+
+            <button id="solveQuadBtn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 40px; font-size: 0.9rem;">Cari Akar &amp; Diskriminan</button>
+
+            <div id="quadResultBox" class="result-box" style="margin-top: 0.5rem;">
+              <span style="color: var(--text-dim);">Klik tombol untuk mencari akar.</span>
+            </div>
+          </div>
+
+          <!-- 2x2 System (SPLDV) -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-purple); font-size: 1.05rem;"><i class="fa-solid fa-equals"></i> Sistem Linier 2 Variabel (SPLDV)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Format: a₁x + b₁y = c₁ &nbsp;|&nbsp; a₂x + b₂y = c₂</p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+              <div class="eq-inputs-row">
+                <input type="number" id="spldvA1" class="styled-input" value="2" placeholder="a₁">
+                <span class="eq-label">x +</span>
+                <input type="number" id="spldvB1" class="styled-input" value="3" placeholder="b₁">
+                <span class="eq-label">y =</span>
+                <input type="number" id="spldvC1" class="styled-input" value="8" placeholder="c₁">
+              </div>
+
+              <div class="eq-inputs-row">
+                <input type="number" id="spldvA2" class="styled-input" value="1" placeholder="a₂">
+                <span class="eq-label">x +</span>
+                <input type="number" id="spldvB2" class="styled-input" value="-1" placeholder="b₂">
+                <span class="eq-label">y =</span>
+                <input type="number" id="spldvC2" class="styled-input" value="-1" placeholder="c₂">
+              </div>
+            </div>
+
+            <button id="solveLinear2x2Btn" class="calc-btn btn-action" style="margin-top: 0.5rem; height: 40px; font-size: 0.9rem;">Selesaikan dengan Eliminasi Gauss</button>
+
+            <div id="spldvResultBox" class="result-box" style="margin-top: 0.5rem;">
+              <span style="color: var(--text-dim);">Klik tombol untuk menyelesaikan sistem persamaan.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 9. UNIT CONVERTER VIEW ================= -->
+      <div id="panel-converter" class="view-panel">
+        <div class="calc-card">
+          <h3 style="color: var(--accent-blue); font-size: 1.05rem;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Konverter Satuan Universal (15+ Kategori)</h3>
+
+          <div style="margin: 0.5rem 0;">
+            <label style="font-size: 0.85rem; color: var(--text-muted);">Pilih Kategori Pengukuran:</label>
+            <select id="converterCatSelect" class="styled-input" style="width: 100%; margin-top: 0.35rem; font-size: 0.95rem;"></select>
+          </div>
+
+          <div class="matrix-builder" style="margin-top: 0.5rem;">
+            <!-- From Unit -->
+            <div class="matrix-card">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Dari Satuan:</label>
+              <select id="convFromUnit" class="styled-input" style="margin: 0.35rem 0;"></select>
+              <input type="number" id="convFromVal" class="styled-input" value="1" style="font-size: 1.25rem; font-weight: 600;">
+            </div>
+
+            <!-- To Unit -->
+            <div class="matrix-card">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Ke Satuan:</label>
+              <select id="convToUnit" class="styled-input" style="margin: 0.35rem 0;"></select>
+              <input type="text" id="convToVal" class="styled-input" value="0" readonly style="font-size: 1.25rem; font-weight: 600; color: var(--accent-cyan);">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 10. DATE / TIME & STOPWATCH VIEW ================= -->
+      <div id="panel-datetime" class="view-panel">
+        <div class="matrix-builder">
+          <!-- Date Calculator -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-cyan); font-size: 1.05rem;"><i class="fa-solid fa-calendar-days"></i> Kalkulator Selisih Tanggal</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Tanggal Mulai:</label>
+              <input type="date" id="dateStart" class="styled-input" value="2026-01-01">
+
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Tanggal Akhir:</label>
+              <input type="date" id="dateEnd" class="styled-input" value="2026-08-27">
+
+              <button id="calcDateDiffBtn" class="calc-btn btn-action" style="height: 40px; font-size: 0.9rem;">Hitung Selisih Hari</button>
+            </div>
+
+            <div id="dateDiffResult" class="result-box" style="margin-top: 0.5rem; display: flex; flex-direction: column; justify-content: center; gap: 0.25rem;">
+              <span style="color: var(--text-dim);">Pilih tanggal dan tekan tombol hitung.</span>
+            </div>
+          </div>
+
+          <!-- High Precision Stopwatch -->
+          <div class="matrix-card">
+            <h3 style="color: var(--accent-purple); font-size: 1.05rem;"><i class="fa-solid fa-stopwatch"></i> Stopwatch Presisi Milidetik</h3>
+            
+            <div style="text-align: center; padding: 1.25rem 0;">
+              <div id="stopwatchDisplay" style="font-family: 'Fira Code', monospace; font-size: 2.5rem; font-weight: 700; color: var(--text-main);">00:00.00</div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="swStartBtn" class="calc-btn btn-action" style="flex: 1; height: 42px; font-size: 0.95rem;">Start</button>
+              <button id="swLapBtn" class="calc-btn btn-fn" style="flex: 1; height: 42px; font-size: 0.95rem;">Lap</button>
+              <button id="swResetBtn" class="calc-btn btn-fn" style="flex: 1; height: 42px; font-size: 0.95rem;">Reset</button>
+            </div>
+
+            <div id="stopwatchLapsList" style="margin-top: 0.75rem; max-height: 140px; overflow-y: auto; font-size: 0.85rem;"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- History Drawer -->
+  <aside id="historyDrawer" class="history-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pita (Tape)</div>
+      <button id="closeHistoryBtn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+    <div class="drawer-footer">
+      <button class="calc-btn btn-fn" style="flex: 1; height: 38px; font-size: 0.8rem;" onclick="window.HistoryManager.exportCSV()">CSV</button>
+      <button class="calc-btn btn-fn" style="flex: 1; height: 38px; font-size: 0.8rem;" onclick="window.HistoryManager.exportTXT()">TXT</button>
+      <button class="calc-btn btn-fn" style="flex: 1; height: 38px; font-size: 0.8rem;" onclick="window.HistoryManager.exportLaTeX()">LaTeX</button>
+      <button class="calc-btn btn-danger" style="flex: 1; height: 38px; font-size: 0.8rem;" onclick="window.HistoryManager.clear()"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </aside>
+
+  <!-- Physical & Mathematical Constants Modal -->
+  <div id="constantsModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 1.15rem; color: var(--accent-cyan);"><i class="fa-solid fa-atom"></i> Konstanta Fundamental Fisika & Matematika</h3>
+        <button class="icon-btn modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Klik konstanta untuk memasukkannya ke kalkulator saat ini:</p>
+      <div class="const-grid">
+        <div class="const-item" onclick="window.OmniApp.inputConstant('pi'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>π (Pi)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Rasio Lingkaran</div></div>
+          <code style="color: var(--accent-blue);">3.14159265</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('e'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>e (Euler)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Basis Logaritma Alami</div></div>
+          <code style="color: var(--accent-blue);">2.71828182</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('phi'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>ϕ (Golden Ratio)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Rasio Emas</div></div>
+          <code style="color: var(--accent-blue);">1.61803398</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('c'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>c (Speed of Light)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Kecepatan Cahaya (m/s)</div></div>
+          <code style="color: var(--accent-blue);">2.99792e8</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('G'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>G (Gravitasi)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Konstanta Gravitasi Universal</div></div>
+          <code style="color: var(--accent-blue);">6.67430e-11</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('h'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>h (Planck)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Konstanta Planck (J·s)</div></div>
+          <code style="color: var(--accent-blue);">6.62607e-34</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('Na'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>N_A (Avogadro)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Bilangan Avogadro (mol⁻¹)</div></div>
+          <code style="color: var(--accent-blue);">6.02214e23</code>
+        </div>
+        <div class="const-item" onclick="window.OmniApp.inputConstant('k'); document.getElementById('constantsModal').classList.remove('open');">
+          <div><b>k_B (Boltzmann)</b><div style="font-size: 0.75rem; color: var(--text-dim);">Konstanta Boltzmann (J/K)</div></div>
+          <code style="color: var(--accent-blue);">1.38064e-23</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help Modal -->
+  <div id="helpModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 1.15rem; color: var(--accent-blue);"><i class="fa-solid fa-keyboard"></i> Panduan Pintasan Keyboard Fisik & Numpad</h3>
+        <button class="icon-btn modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tombol Keyboard</th>
+            <th>Aksi Kalkulator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd>0</kbd> - <kbd>9</kbd> &amp; <kbd>.</kbd></td><td>Memasukkan angka dan titik desimal</td></tr>
+          <tr><td><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> <kbd>^</kbd> <kbd>%</kbd></td><td>Operasi aritmatika matematika</td></tr>
+          <tr><td><kbd>Enter</kbd> atau <kbd>=</kbd></td><td>Menghitung hasil ekspresi (=)</td></tr>
+          <tr><td><kbd>Backspace</kbd></td><td>Menghapus 1 karakter terakhir</td></tr>
+          <tr><td><kbd>C</kbd> atau <kbd>Escape</kbd></td><td>Menghapus semua (All Clear / Reset)</td></tr>
+          <tr><td><kbd>(</kbd> dan <kbd>)</kbd></td><td>Kurung buka dan kurung tutup</td></tr>
+          <tr><td><kbd>?</kbd> atau <kbd>F1</kbd></td><td>Membuka bantuan pintasan keyboard ini</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Engine Scripts -->
+  <script src="js/engine/math-parser.js"></script>
+  <script src="js/engine/programmer.js"></script>
+  <script src="js/engine/grapher.js"></script>
+  <script src="js/engine/financial.js"></script>
+  <script src="js/engine/matrix.js"></script>
+  <script src="js/engine/statistics.js"></script>
+  <script src="js/engine/solver.js"></script>
+  <script src="js/engine/converter.js"></script>
+
+  <!-- UI & Orchestrator Scripts -->
+  <script src="js/ui/audio.js"></script>
+  <script src="js/ui/history.js"></script>
+  <script src="js/ui/shortcuts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

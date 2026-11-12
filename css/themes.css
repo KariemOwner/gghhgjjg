@@ -1,0 +1,209 @@
+/* ==========================================================================
+   OmniCalc Pro - Theme Definitions
+   ========================================================================== */
+
+:root {
+  /* Default: Cyber Dark Theme */
+  --bg-primary: #0a0d14;
+  --bg-secondary: #121824;
+  --bg-tertiary: #1b2333;
+  --bg-surface: rgba(22, 30, 46, 0.75);
+  --bg-surface-hover: rgba(30, 41, 63, 0.85);
+  --bg-surface-active: rgba(43, 58, 88, 0.95);
+  
+  --border-color: rgba(66, 153, 225, 0.2);
+  --border-glow: rgba(56, 189, 248, 0.4);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-inverse: #0f172a;
+
+  --accent-cyan: #00f2fe;
+  --accent-blue: #4facfe;
+  --accent-purple: #a855f7;
+  --accent-pink: #ec4899;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+
+  /* Button types */
+  --btn-num-bg: rgba(255, 255, 255, 0.04);
+  --btn-num-hover: rgba(255, 255, 255, 0.1);
+  --btn-num-text: #f1f5f9;
+
+  --btn-op-bg: rgba(79, 172, 254, 0.12);
+  --btn-op-hover: rgba(79, 172, 254, 0.25);
+  --btn-op-text: #38bdf8;
+
+  --btn-fn-bg: rgba(168, 85, 247, 0.12);
+  --btn-fn-hover: rgba(168, 85, 247, 0.25);
+  --btn-fn-text: #c084fc;
+
+  --btn-action-bg: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  --btn-action-text: #050d1a;
+  --btn-action-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+
+  --btn-danger-bg: rgba(244, 63, 94, 0.15);
+  --btn-danger-hover: rgba(244, 63, 94, 0.3);
+  --btn-danger-text: #fb7185;
+
+  --display-bg: rgba(8, 12, 20, 0.85);
+  --display-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --glass-blur: blur(16px);
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Theme: Obsidian OLED */
+[data-theme="oled"] {
+  --bg-primary: #000000;
+  --bg-secondary: #050505;
+  --bg-tertiary: #0d0d0d;
+  --bg-surface: rgba(18, 18, 18, 0.85);
+  --bg-surface-hover: rgba(28, 28, 28, 0.95);
+  --bg-surface-active: rgba(40, 40, 40, 1);
+
+  --border-color: rgba(255, 255, 255, 0.15);
+  --border-glow: rgba(0, 255, 170, 0.5);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  --text-inverse: #000000;
+
+  --accent-cyan: #00ffaa;
+  --accent-blue: #00b4d8;
+  --accent-purple: #d946ef;
+  --accent-pink: #f43f5e;
+  --accent-emerald: #00ff66;
+  --accent-amber: #ffb703;
+  --accent-rose: #ff3366;
+
+  --btn-num-bg: #0a0a0a;
+  --btn-num-hover: #171717;
+  --btn-num-text: #ffffff;
+
+  --btn-op-bg: rgba(0, 255, 170, 0.08);
+  --btn-op-hover: rgba(0, 255, 170, 0.2);
+  --btn-op-text: #00ffaa;
+
+  --btn-fn-bg: rgba(217, 70, 239, 0.08);
+  --btn-fn-hover: rgba(217, 70, 239, 0.2);
+  --btn-fn-text: #e879f9;
+
+  --btn-action-bg: linear-gradient(135deg, #00ffaa 0%, #00b4d8 100%);
+  --btn-action-text: #000000;
+  --btn-action-shadow: 0 0 25px rgba(0, 255, 170, 0.45);
+
+  --btn-danger-bg: rgba(255, 51, 102, 0.12);
+  --btn-danger-hover: rgba(255, 51, 102, 0.25);
+  --btn-danger-text: #ff4d79;
+
+  --display-bg: #020202;
+  --display-glow: 0 0 35px rgba(0, 255, 170, 0.08);
+}
+
+/* Theme: Studio Light */
+[data-theme="light"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e2e8f0;
+  --bg-surface: rgba(255, 255, 255, 0.85);
+  --bg-surface-hover: rgba(241, 245, 249, 0.95);
+  --bg-surface-active: #cbd5e1;
+
+  --border-color: rgba(203, 213, 225, 0.8);
+  --border-glow: rgba(59, 130, 246, 0.4);
+  --border-subtle: rgba(0, 0, 0, 0.06);
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --text-inverse: #ffffff;
+
+  --accent-cyan: #0284c7;
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  --accent-pink: #db2777;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+
+  --btn-num-bg: #ffffff;
+  --btn-num-hover: #f8fafc;
+  --btn-num-text: #1e293b;
+
+  --btn-op-bg: rgba(37, 99, 235, 0.08);
+  --btn-op-hover: rgba(37, 99, 235, 0.16);
+  --btn-op-text: #1d4ed8;
+
+  --btn-fn-bg: rgba(124, 58, 237, 0.08);
+  --btn-fn-hover: rgba(124, 58, 237, 0.16);
+  --btn-fn-text: #6d28d9;
+
+  --btn-action-bg: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+  --btn-action-text: #ffffff;
+  --btn-action-shadow: 0 4px 18px rgba(37, 99, 235, 0.3);
+
+  --btn-danger-bg: rgba(225, 29, 72, 0.08);
+  --btn-danger-hover: rgba(225, 29, 72, 0.16);
+  --btn-danger-text: #be123c;
+
+  --display-bg: #ffffff;
+  --display-glow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Theme: Retro Casio Synth */
+[data-theme="retro"] {
+  --bg-primary: #2b2b2b;
+  --bg-secondary: #383838;
+  --bg-tertiary: #4a4a4a;
+  --bg-surface: rgba(50, 50, 50, 0.9);
+  --bg-surface-hover: rgba(65, 65, 65, 0.95);
+  --bg-surface-active: #5a5a5a;
+
+  --border-color: #666666;
+  --border-glow: #e6b800;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+
+  --text-main: #f0f0f0;
+  --text-muted: #dcdcaa;
+  --text-dim: #9cdcfe;
+  --text-inverse: #1e1e1e;
+
+  --accent-cyan: #4ec9b0;
+  --accent-blue: #569cd6;
+  --accent-purple: #c586c0;
+  --accent-pink: #ce9178;
+  --accent-emerald: #6a9955;
+  --accent-amber: #dcdcaa;
+  --accent-rose: #f44747;
+
+  --btn-num-bg: #404040;
+  --btn-num-hover: #505050;
+  --btn-num-text: #ffffff;
+
+  --btn-op-bg: #303b44;
+  --btn-op-hover: #3e4d58;
+  --btn-op-text: #4fc1ff;
+
+  --btn-fn-bg: #333333;
+  --btn-fn-hover: #444444;
+  --btn-fn-text: #dcdcaa;
+
+  --btn-action-bg: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  --btn-action-text: #ffffff;
+  --btn-action-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+
+  --btn-danger-bg: #5c2020;
+  --btn-danger-hover: #752828;
+  --btn-danger-text: #ff8888;
+
+  --display-bg: #8fa382;
+  --display-glow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
